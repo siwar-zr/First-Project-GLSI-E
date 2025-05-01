@@ -1,14 +1,15 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, inject } from '@angular/core';
+import { AfterViewInit, Component, inject, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { TabsComponent } from "../../../reusable/tabs/tabs.component";
 
 @Component({
   selector: 'app-post-api',
-  imports: [FormsModule],
+  imports: [FormsModule, TabsComponent],
   templateUrl: './post-api.component.html',
   styleUrl: './post-api.component.css'
 })
-export class PostApiComponent {
+export class PostApiComponent implements OnInit, AfterViewInit{
   carList: any[] = [];
   carObj: any = {
     "carId": 0,
@@ -21,6 +22,27 @@ export class PostApiComponent {
     "regNo": ""
   }
   http = inject(HttpClient);
+
+  firstName: string
+  currentTab: string = 'Car List';
+
+  constructor(){
+    this.firstName = '';
+  }
+
+  ngOnInit(): void {
+    this.getAllCars();
+    debugger;
+  }
+
+  onTabChange(tabName: string){
+    debugger;
+    this.currentTab = tabName
+  }
+
+  ngAfterViewInit(): void {
+    console.log("after view init", performance.now())
+  }
 
   getAllCars(){
     this.http.get("https://freeapi.miniprojectideas.com/api/CarRentalApp/GetCars").subscribe((res:any)=>{
